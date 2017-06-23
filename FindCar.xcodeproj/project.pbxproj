@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		FA4B7CE81EEBCC7400460CCE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4B7CE71EEBCC7400460CCE /* main.m */; };
 		FA4B7CEB1EEBCC7400460CCE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4B7CEA1EEBCC7400460CCE /* AppDelegate.m */; };
-		FA4B7CEE1EEBCC7400460CCE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4B7CED1EEBCC7400460CCE /* ViewController.m */; };
+		FA4B7CEE1EEBCC7400460CCE /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4B7CED1EEBCC7400460CCE /* MapViewController.m */; };
 		FA4B7CF11EEBCC7400460CCE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA4B7CEF1EEBCC7400460CCE /* Main.storyboard */; };
 		FA4B7CF31EEBCC7400460CCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA4B7CF21EEBCC7400460CCE /* Assets.xcassets */; };
 		FA4B7CF61EEBCC7400460CCE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA4B7CF41EEBCC7400460CCE /* LaunchScreen.storyboard */; };
@@ -35,7 +35,7 @@
 		FA4B7D2C1EEBD29E00460CCE /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4B7D2B1EEBD29E00460CCE /* NavigationController.m */; };
 		FAC8A5561EEE7AB90002AC25 /* AMapLocationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC8A5551EEE7AB90002AC25 /* AMapLocationKit.framework */; };
 		FAC8A5591EF0DD2B0002AC25 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC8A5581EF0DD2B0002AC25 /* MBProgressHUD.m */; };
-		FAC8A56B1EF2E3310002AC25 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC8A56A1EF2E3310002AC25 /* MapViewController.m */; };
+		FAD5C85A1EFAA9AE005CA673 /* PointInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD5C8591EFAA9AE005CA673 /* PointInfoView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,8 +43,8 @@
 		FA4B7CE71EEBCC7400460CCE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FA4B7CE91EEBCC7400460CCE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FA4B7CEA1EEBCC7400460CCE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		FA4B7CEC1EEBCC7400460CCE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		FA4B7CED1EEBCC7400460CCE /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		FA4B7CEC1EEBCC7400460CCE /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		FA4B7CED1EEBCC7400460CCE /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		FA4B7CF01EEBCC7400460CCE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA4B7CF21EEBCC7400460CCE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA4B7CF51EEBCC7400460CCE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -73,8 +73,8 @@
 		FAC8A5551EEE7AB90002AC25 /* AMapLocationKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AMapLocationKit.framework; sourceTree = "<group>"; };
 		FAC8A5571EF0DD2B0002AC25 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		FAC8A5581EF0DD2B0002AC25 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		FAC8A5691EF2E3310002AC25 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		FAC8A56A1EF2E3310002AC25 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		FAD5C8581EFAA9AE005CA673 /* PointInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointInfoView.h; sourceTree = "<group>"; };
+		FAD5C8591EFAA9AE005CA673 /* PointInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointInfoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,10 +186,8 @@
 		FA4B7D251EEBD1FC00460CCE /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				FA4B7CEC1EEBCC7400460CCE /* ViewController.h */,
-				FA4B7CED1EEBCC7400460CCE /* ViewController.m */,
-				FAC8A5691EF2E3310002AC25 /* MapViewController.h */,
-				FAC8A56A1EF2E3310002AC25 /* MapViewController.m */,
+				FA4B7CEC1EEBCC7400460CCE /* MapViewController.h */,
+				FA4B7CED1EEBCC7400460CCE /* MapViewController.m */,
 				FA4B7D2A1EEBD29E00460CCE /* NavigationController.h */,
 				FA4B7D2B1EEBD29E00460CCE /* NavigationController.m */,
 			);
@@ -199,6 +197,8 @@
 		FA4B7D261EEBD20300460CCE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				FAD5C8581EFAA9AE005CA673 /* PointInfoView.h */,
+				FAD5C8591EFAA9AE005CA673 /* PointInfoView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -299,10 +299,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA4B7CEE1EEBCC7400460CCE /* ViewController.m in Sources */,
+				FA4B7CEE1EEBCC7400460CCE /* MapViewController.m in Sources */,
+				FAD5C85A1EFAA9AE005CA673 /* PointInfoView.m in Sources */,
 				FA4B7D2C1EEBD29E00460CCE /* NavigationController.m in Sources */,
 				FAC8A5591EF0DD2B0002AC25 /* MBProgressHUD.m in Sources */,
-				FAC8A56B1EF2E3310002AC25 /* MapViewController.m in Sources */,
 				FA4B7CEB1EEBCC7400460CCE /* AppDelegate.m in Sources */,
 				FA4B7CE81EEBCC7400460CCE /* main.m in Sources */,
 			);

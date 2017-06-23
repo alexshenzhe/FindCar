@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <AMapFoundationKit/AMapFoundationKit.h>
-#import "ViewController.h"
+#import "MapViewController.h"
 #import "NavigationController.h"
 
 @interface AppDelegate ()
@@ -20,8 +20,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *viewController = [[ViewController alloc] init];
-    NavigationController *navigationController = [[NavigationController alloc] initWithRootViewController:viewController];
+    MapViewController *mapViewController = [[MapViewController alloc] init];
+    NavigationController *navigationController = [[NavigationController alloc] initWithRootViewController:mapViewController];
     self.window.rootViewController = navigationController;
     
     [self.window makeKeyAndVisible];
