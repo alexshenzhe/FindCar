@@ -12,4 +12,8 @@
 
 - (instancetype)initPointInfoViewWithAddress:(NSString *)address andGPS:(NSString *)GPSInfo;
 
+- (void)removeViewOutOfScreen;
+
+- (void)setPointInfoViewAddress:(NSString *)address andGPS:(NSString *)GPSInfo;
+
 @end

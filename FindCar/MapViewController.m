@@ -27,6 +27,8 @@
 @property (nonatomic, strong) UIButton *locationButton; // 定位按钮
 @property (nonatomic, strong) UIButton *startPlanningButton; // 路径规划按钮
 @property (nonatomic, strong) PointInfoView *pointInfoView; // 点位信息view
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer; // 长按手势
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer; // 单击手势
 
 @end
 
@@ -39,6 +41,8 @@
     [self setNavigationBarDefault];
     // 添加长按手势
     [self.mapView addGestureRecognizer:[self addLongPressGestureRecognizerToView]];
+    // 添加点击手势
+    [self.mapView addGestureRecognizer:[self addTapGestureRecognizerToView]];
     
     [self createSubviewIfMoveUp:NO];
     // 显示路况
@@ -76,21 +80,18 @@
         self.locationButton = [[UIButton alloc] init];
     }
     
+    float buttonW = 30;
+    float buttonH = buttonW;
+    float buttonX = 10;
+    float buttonY = 0;
     if (!ifMoveUp) {
-        float buttonW = 30;
-        float buttonH = buttonW;
-        float buttonX = 10;
-        float buttonY = [UIScreen mainScreen].bounds.size.height - (buttonH + 30);
-        self.locationButton.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
+        buttonY = [UIScreen mainScreen].bounds.size.height - (buttonH + 30);
     } else {
-        float buttonW = 30;
-        float buttonH = buttonW;
-        float buttonX = 10;
-        float buttonY = [UIScreen mainScreen].bounds.size.height - (buttonH + 30 + [UIScreen mainScreen].bounds.size.height / 5);
-        self.locationButton.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
+        buttonY = [UIScreen mainScreen].bounds.size.height - (buttonH + 30 + [UIScreen mainScreen].bounds.size.height / 5);
     }
+    self.locationButton.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
     
-    [self.locationButton setTitle:@"定位" forState:UIControlStateNormal];
+    [self.locationButton setTitle:@"1" forState:UIControlStateNormal];
     self.locationButton.backgroundColor = [UIColor grayColor];
     [self.locationButton addTarget:self action:@selector(userLocationCenter) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.locationButton];
@@ -174,6 +175,7 @@
  * 找车
  */
 - (void)findMyCar {
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     if (self.userLocationArray.count < 1) {
         [self showMessageHUDWithString:@"没有保存车辆位置"];
         return;
@@ -181,7 +183,7 @@
     // 清空已有大头针 显示保存的大头针
     [self showCurrentPoint];
     
-    //
+    // 显示下方详细页
     NSString *GPSInfo = [NSString stringWithFormat:@"%f,%f",self.pointAnnotation.coordinate.longitude, self.pointAnnotation.coordinate.latitude];
     [self showPointInfoViewWithGPS:GPSInfo andAddress:[self.userLocationArray lastObject][@"address"] ifShowGoButton:YES];
 }
@@ -222,9 +224,6 @@
 
 - (void)searchRoutePlanningWalk {
     NSLog(@"searchRoutePlanningWalk");
-//    self.search = [[AMapSearchAPI alloc] init];
-//    self.search.delegate = self;
-    
     AMapWalkingRouteSearchRequest *navi = [[AMapWalkingRouteSearchRequest alloc] init];
     
     // 出发点
@@ -281,49 +280,75 @@
  * 逆地理编码回调函数
  */
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
-    if (response.regeocode != nil) {
+    NSLog(@"onReGeocodeSearchDone");
+    if (response.regeocode) {
         NSString *address = [NSString string];
         address = response.regeocode.formattedAddress;
         self.addressInfo = address;
         NSLog(@"address:%@", address);
-        
         // 详细信息view
         NSString *GPSInfo = [[NSString alloc] initWithFormat:@"%f,%f",self.pointAnnotation.coordinate.longitude, self.pointAnnotation.coordinate.latitude];
-        [self showPointInfoViewWithGPS:GPSInfo andAddress:address ifShowGoButton:NO];
+        [self showPointInfoViewWithGPS:GPSInfo andAddress:self.addressInfo ifShowGoButton:NO];
     }
 }
 
 # pragma mark - 点位详细信息view
 
+/**
+ * 创建点位详细信息view
+ */
 - (void)showPointInfoViewWithGPS:(NSString *)GPSInfo andAddress:(NSString *)address ifShowGoButton:(BOOL)showGoButton {
-    [self cleanPointInfoView];
-
-    self.pointInfoView = [[PointInfoView alloc] initPointInfoViewWithAddress:address andGPS:GPSInfo];
-    [self.mapView addSubview:self.pointInfoView];
-    
+    if (!self.pointInfoView) {
+        // 调整定位按钮
+        [self createSubviewIfMoveUp:YES];
+        
+        self.pointInfoView = [[PointInfoView alloc] initPointInfoViewWithAddress:address andGPS:GPSInfo];
+    } else {
+        [self.pointInfoView setPointInfoViewAddress:address andGPS:GPSInfo];
+    }
+    [self.navigationController.view addSubview:self.pointInfoView];
+    // 是否显示导航按钮
     if (showGoButton) {
         float viewW = [UIScreen mainScreen].bounds.size.width;
         float viewY = [UIScreen mainScreen].bounds.size.height * 4 / 5;
-        self.startPlanningButton = [[UIButton alloc] initWithFrame:CGRectMake(viewW - 80, viewY - 30, 60, 60)];
+        if (!self.startPlanningButton) {
+            self.startPlanningButton = [[UIButton alloc] init];
+        }
+        self.startPlanningButton.frame = CGRectMake(viewW - 80, viewY - 30, 60, 60);
         [self.startPlanningButton addTarget:self action:@selector(searchRoutePlanningWalk) forControlEvents:UIControlEventTouchUpInside];
-        [self.startPlanningButton setTitle:@"GO" forState:UIControlStateNormal];
-        self.startPlanningButton.backgroundColor = [UIColor redColor];
-        [self.mapView addSubview:self.startPlanningButton];
+        [self.startPlanningButton setTitle:@"路线" forState:UIControlStateNormal];
+        self.startPlanningButton.backgroundColor = [UIColor blueColor];
+        [self.navigationController.view addSubview:self.startPlanningButton];
     }
+    
 }
 
+/**
+ * 清除详细信息view及路径规划按钮
+ */
 - (void)cleanPointInfoView {
-    [self.pointInfoView removeFromSuperview];
-    [self.startPlanningButton removeFromSuperview];
+    [UIView animateWithDuration:1.0 animations:^{
+        // 移动导航按钮及详细信息view
+        [self.pointInfoView removeViewOutOfScreen];
+        self.startPlanningButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width - 50, [UIScreen mainScreen].bounds.size.height + 30);
+        // 移动定位按钮
+        [self createSubviewIfMoveUp:NO];
+    } completion:^(BOOL finished) {
+        [self.pointInfoView removeFromSuperview];
+        self.pointInfoView = nil;
+        [self.startPlanningButton removeFromSuperview];
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+    }];
 }
 
-# pragma mark - 支持多手势
+# pragma mark - 手势识别
 
+/**
+ * 支持多手势
+ */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
 }
-
-# pragma mark - 长按手势方法
 
 /**
  * 长按手势
@@ -332,43 +357,59 @@
     // 长按手势
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     longPressGestureRecognizer.delegate = self;
-    longPressGestureRecognizer.minimumPressDuration = 0.5;
+    longPressGestureRecognizer.minimumPressDuration = 1.0;
     longPressGestureRecognizer.allowableMovement = 50.0;
-    return longPressGestureRecognizer;
+    self.longPressGestureRecognizer = longPressGestureRecognizer;
+    return self.longPressGestureRecognizer;
 }
 
+/**
+ * 长按调用方法
+ */
 - (void)longPress:(UILongPressGestureRecognizer *)sender {
     if (sender.state != UIGestureRecognizerStateBegan) {
         return;
     }
-    // 清空已有大头针
-    [self cleanMapView];
-    
     // 坐标转换
     CGPoint longPressPoint = [sender locationInView:self.mapView];
     CLLocationCoordinate2D coordinate2d = [self.mapView convertPoint:longPressPoint toCoordinateFromView:self.mapView];
-    
     //添加大头针
     MAPointAnnotation *pointAnnotation = [self addPointAnnotationTo:coordinate2d];
     [self.mapView addAnnotation:pointAnnotation];
     self.pointAnnotation = pointAnnotation;
     self.mapView.delegate = self;
-    
     // 获取地址信息
-//    self.search = [[AMapSearchAPI alloc] init];
-//    self.search.delegate = self;
     AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
     regeo.location = [AMapGeoPoint locationWithLatitude:self.pointAnnotation.coordinate.latitude longitude:self.pointAnnotation.coordinate.longitude];
     regeo.requireExtension = YES;
     [self.search AMapReGoecodeSearch:regeo];
-    
-    // 调整定位按钮
-    [self createSubviewIfMoveUp:YES];
+}
+
+/**
+ * 单击手势
+ */
+- (UITapGestureRecognizer *)addTapGestureRecognizerToView {
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    // 排除与长按手势的干扰
+    [tapGestureRecognizer requireGestureRecognizerToFail:self.longPressGestureRecognizer];
+    tapGestureRecognizer.delegate = self;
+    return tapGestureRecognizer;
+}
+
+/**
+ * 单击调用方法
+ */
+- (void)tap:(UITapGestureRecognizer *)sender {
+    // 移除屏幕上的大头针及view
+    [self cleanPointInfoView];
+    [self cleanMapView];
 }
 
 # pragma mark - 添加大头针
 
 - (MAPointAnnotation *)addPointAnnotationTo:(CLLocationCoordinate2D)coordinate2d {
+    // 清空已有大头针
+    [self cleanMapView];
     MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
     pointAnnotation.coordinate = coordinate2d;
     pointAnnotation.title = @"我在这里";
@@ -398,17 +439,13 @@
 /**
  * 设置路径规划线段颜色等
  */
-- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay
-{
-    if ([overlay isKindOfClass:[MAPolyline class]])
-    {
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay {
+    if ([overlay isKindOfClass:[MAPolyline class]]) {
         MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:overlay];
-        
         polylineRenderer.lineWidth    = 8.f;
         polylineRenderer.strokeColor  = [UIColor blueColor];
         polylineRenderer.lineJoinType = kMALineJoinRound;
         polylineRenderer.lineCapType  = kMALineCapRound;
-        
         return polylineRenderer;
     }
     return nil;

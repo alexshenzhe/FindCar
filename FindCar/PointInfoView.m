@@ -53,10 +53,18 @@
 
 - (instancetype)initPointInfoViewWithAddress:(NSString *)address andGPS:(NSString *)GPSInfo {
     if (self = [super init]) {
-        self.addressLabel.text = address;
-        self.GPSLabel.text = GPSInfo;
+        [self setPointInfoViewAddress:address andGPS:GPSInfo];
     }
     return self;
+}
+
+- (void)setPointInfoViewAddress:(NSString *)address andGPS:(NSString *)GPSInfo {
+    self.addressLabel.text = address;
+    self.GPSLabel.text = GPSInfo;
+}
+
+- (void)removeViewOutOfScreen {
+    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height * 11/10 + 30) ;
 }
 
 @end
